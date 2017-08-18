@@ -6,13 +6,13 @@
     "Slack",
     "bot"
   ],
-  "website": "https://github.com/orliesaurus/greetingslack",
-  "repository": "https://github.com/orliesaurus/greetingslack",
+  "website": "https://github.com/yjyum/bot",
+  "repository": "https://github.com/yjyum/bot",
   "env": {
     "SLACK-TOKEN": {
       "description": "Your Slack API Token",
-      "value": "1234-12314123123-123123123",
-      "required": "true"
+      "value": "xoxb-228796531026-89zNYbpTnJaHmPI18kCjcNh6",
+      "required": "false"
     },
     "UNFURL-LINKS": {
       "description": "We UNFURL only the last link by default, trust me its good",

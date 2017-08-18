@@ -22,14 +22,39 @@ except:
 
 def parse_join(message):
     m = json.loads(message)
-    if (m['type'] == "team_join"):
-        x = requests.get("https://slack.com/api/im.open?token="+TOKEN+"&user="+m["user"]["id"])
-        x = x.json()
-        x = x["channel"]["id"]
-        if (UNFURL.lower() == "false"):
-          xx = requests.post("https://slack.com/api/chat.postMessage?token="+TOKEN+"&channel="+x+"&text="+urllib.quote(MESSAGE)+"&parse=full&as_user=true&unfurl_links=false")
-        else:
-          xx = requests.post("https://slack.com/api/chat.postMessage?token="+TOKEN+"&channel="+x+"&text="+urllib.quote(MESSAGE)+"&parse=full&as_user=true")
+
+    ori = m['text']
+
+    user = ori.split('/')[0]
+    ns = ori.split('/')[1]
+    if (user == "team"):
+        ns = ns.lower()
+        ns = ns.replace("_", "-")
+    else:
+        ns = "user-" + ns
+
+    app = ori.split('/')[2]
+
+    website = "http://localhost:8001/static/?ns=" + ns + "&app=" + app
+
+    x = requests.get("https://slack.com/api/im.open?token="+TOKEN+"&user="+m["user"]["id"])
+    x = x.json()
+    x = x["channel"]["id"]
+    if (UNFURL.lower() == "false"):
+        xx = requests.post("https://slack.com/api/chat.postMessage?token="+TOKEN+"&channel="+x+"&text="+urllib.quote(website)+"&parse=full&as_user=true&unfurl_links=false")
+    else:
+        xx = requests.post("https://slack.com/api/chat.postMessage?token="+TOKEN+"&channel="+x+"&text="+urllib.quote(website)+"&parse=full&as_user=true")
+
+
+
+    # if (m['type'] == "team_join"):
+    #     x = requests.get("https://slack.com/api/im.open?token="+TOKEN+"&user="+m["user"]["id"])
+    #     x = x.json()
+    #     x = x["channel"]["id"]
+    #     if (UNFURL.lower() == "false"):
+    #       xx = requests.post("https://slack.com/api/chat.postMessage?token="+TOKEN+"&channel="+x+"&text="+urllib.quote(MESSAGE)+"&parse=full&as_user=true&unfurl_links=false")
+    #     else:
+    #       xx = requests.post("https://slack.com/api/chat.postMessage?token="+TOKEN+"&channel="+x+"&text="+urllib.quote(MESSAGE)+"&parse=full&as_user=true")
         #DEBUG
         #print '\033[91m' + "HELLO SENT" + m["user"]["id"] + '\033[0m'
         #
@@ -43,6 +68,7 @@ def start_rtm():
     return r
 
 def on_message(ws, message):
+    print "New message"
     parse_join(message)
 
 def on_error(ws, error):
